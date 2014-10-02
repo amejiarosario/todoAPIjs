@@ -28,4 +28,12 @@ router.get('/:id', function(req, res, next) {
   });
 });
 
+/* PUT /todos/:id */
+router.put('/:id', function(req, res, next) {
+  Todo.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
+    if (err) return next(err);
+    res.json(post);
+  });
+});
+
 module.exports = router;
