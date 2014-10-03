@@ -22,6 +22,7 @@
           <input type="checkbox" ng-model="todo.completed" ng-change="update($index)">
           <a ng-show="!editing[$index]" href="#/{{todo._id}}">{{todo.name}}</a>
           <button ng-show="!editing[$index]" ng-click="edit($index)">edit</button>
+          <button ng-show="!editing[$index]" ng-click="remove($index)">remove</button>
 
           <input ng-show="editing[$index]" type="text" ng-model="todo.name">
           <button ng-show="editing[$index]" ng-click="update($index)">update</button>
@@ -37,6 +38,7 @@
       note: <textarea ng-model="todo.note"></textarea><br><br>
 
       <button ng-click="update()">update</button>
+      <button ng-click="remove()">remove</button>
       <a href="/">Cancel</a>
     </script>
 
@@ -85,6 +87,13 @@
             $scope.todos[index] = angular.copy($scope.editing[index]);
             $scope.editing[index] = false;
           }
+
+          $scope.remove = function(index){
+            var todo = $scope.todos[index];
+            Todos.remove({id: todo._id}, function(){
+              $scope.todos.splice(index, 1);
+            });
+          }
         }])
 
         .controller('TodoDetailCtrl', ['$scope', '$routeParams', 'Todos', '$location', function ($scope, $routeParams, Todos, $location) {
@@ -92,6 +101,12 @@
 
           $scope.update = function(){
             Todos.update({id: $scope.todo._id}, $scope.todo, function(){
+              $location.url('/');
+            });
+          }
+
+          $scope.remove = function(){
+            Todos.remove({id: $scope.todo._id}, function(){
               $location.url('/');
             });
           }
