@@ -20,7 +20,7 @@
       <ul>
         <li ng-repeat="todo in todos | filter: search">
           <input type="checkbox" ng-model="todo.completed">
-          <a href="#/{{$index}}">{{todo.name}}</a>
+          <a href="#/{{todo._id}}">{{todo.name}}</a>
         </li>
       </ul>
       New task <input type="text" ng-model="newTodo"><button ng-click="save()">Create</button>
@@ -64,7 +64,7 @@
         }])
 
         .controller('TodoDetailCtrl', ['$scope', '$routeParams', 'Todos', function ($scope, $routeParams, Todos) {
-          $scope.todo = Todos[$routeParams.id];
+          $scope.todo = Todos.get({id: $routeParams.id });
         }])
 
         //---------------
