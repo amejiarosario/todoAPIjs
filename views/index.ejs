@@ -37,26 +37,21 @@
         // Services
         //---------------
 
-        .factory('Todos', function(){
-          return [
-            { name: 'AngularJS Directives', completed: true, note: 'add notes...' },
-            { name: 'Data binding', completed: true, note: 'add notes...' },
-            { name: '$scope', completed: true, note: 'add notes...' },
-            { name: 'Controllers and Modules', completed: true, note: 'add notes...' },
-            { name: 'Templates and routes', completed: true, note: 'add notes...' },
-            { name: 'Filters and Services', completed: false, note: 'add notes...' },
-            { name: 'Get started with Node/ExpressJS', completed: false, note: 'add notes...' },
-            { name: 'Setup MongoDB database', completed: false, note: 'add notes...' },
-            { name: 'Be awesome!', completed: false, note: 'add notes...' },
-          ];
-        })
+        .factory('Todos', ['$http', function($http){
+          return $http.get('/todos');
+        }])
 
         //---------------
         // Controllers
         //---------------
 
         .controller('TodoController', ['$scope', 'Todos', function ($scope, Todos) {
-          $scope.todos = Todos;
+          Todos.success(function(data){
+            $scope.todos = data;
+          }).error(function(data, status){
+            console.log(data, status);
+            $scope.todos = [];
+          });
         }])
 
         .controller('TodoDetailCtrl', ['$scope', '$routeParams', 'Todos', function ($scope, $routeParams, Todos) {
