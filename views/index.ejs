@@ -23,6 +23,7 @@
           <a href="#/{{$index}}">{{todo.name}}</a>
         </li>
       </ul>
+      New task <input type="text" ng-model="newTodo"><button ng-click="save()">Create</button>
     </script>
 
     <script type="text/ng-template" id="/todoDetails.html">
@@ -50,6 +51,16 @@
 
         .controller('TodoController', ['$scope', 'Todos', function ($scope, Todos) {
           $scope.todos = Todos.query();
+
+          $scope.save = function(){
+            if(!$scope.newTodo || $scope.newTodo.length < 1) return;
+            var todo = new Todos({ name: $scope.newTodo, completed: false });
+
+            todo.$save(function(){
+              $scope.todos.push(todo);
+              $scope.newTodo = ''; // clear textbox
+            });
+          }
         }])
 
         .controller('TodoDetailCtrl', ['$scope', '$routeParams', 'Todos', function ($scope, $routeParams, Todos) {
