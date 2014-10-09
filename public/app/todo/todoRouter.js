@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('todo')
   .config(['$routeProvider', function ($routeProvider) {
     $routeProvider
