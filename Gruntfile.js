@@ -16,9 +16,15 @@ module.exports = function(grunt){
         src: paths.backjs
       }
     },
+    nodemon: {
+      dev: {
+        script: './bin/www'
+      }
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-nodemon');
 
-  grunt.registerTask('default', ['jshint']);
+  grunt.registerTask('default', ['jshint', 'nodemon']);
 }
