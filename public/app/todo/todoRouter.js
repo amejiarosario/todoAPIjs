@@ -2,12 +2,12 @@ angular.module('todo')
   .config(['$routeProvider', function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: '/todos.html',
+        templateUrl: '/app/todo/todos.html',
         controller: 'TodoController'
       })
 
       .when('/:id', {
-        templateUrl: '/todoDetails.html',
+        templateUrl: '/app/todo/todoDetail.html',
         controller: 'TodoDetailCtrl'
      });
   }]);
