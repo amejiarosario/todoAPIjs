@@ -7,23 +7,25 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-var todos = require('./routes/todos');
+var routes = require('./server/index/indexRouter');
+var todos = require('./server/todo/todoRouter');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/todoApp', function(err) {
+var databaseURI = 'mongodb://localhost/todoApp' + process.env.NODE_ENV;
+
+mongoose.connect(databaseURI, function(err) {
   if (err) {
-    console.error('connection error', err);
+    console.error(databaseURI + ' connection error. ', err);
     throw(err);
-  } else {
-    console.log('connection successful');
+  } else /*if(process.env.NODE_ENV === 'development')*/{
+    console.log(databaseURI + ' connected.');
   }
 });
 
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'server/shared'));
 app.set('view engine', 'ejs');
 
 app.use(favicon(__dirname + '/public/favicon.ico'));
