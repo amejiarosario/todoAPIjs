@@ -1,15 +1,15 @@
 module.exports = function(grunt){
   var paths = {
-    backend: {
+    server: {
       js: ['server/**/*.js', 'server.js', '!server/**/tests/*.js'],
       templates: ['server/**/*.ejs'],
       tests: ['server/**/tests/*.js']
     },
 
-    frontend: {
-      js: ['public/app/{,*/}*.js'],
+    client: {
+      js: ['public/app/{,*/}*.js', '!public/app/**/tests/*.js'],
       templates: ['public/app/**/*.html'],
-      tests: []
+      tests: ['public/app/**/tests/*.js']
     }
   };
 
@@ -18,23 +18,23 @@ module.exports = function(grunt){
       options: {
         jshintrc: true
       },
-      frontend: {
-        src: paths.frontend.js,
+      client: {
+        src: paths.client.js,
       },
-      backend: {
-        src: paths.backend.js
+      server: {
+        src: paths.server.js
       },
-      backendTests: {
-        src: paths.backend.tests
+      serverTests: {
+        src: paths.server.tests
       },
-      frontendTests: {
-        src: paths.frontend.tests
+      clientTests: {
+        src: paths.client.tests
       }
     },
 
     nodemon: {
       options: {
-        watch: paths.backend.js.concat(paths.backend.templates),
+        watch: paths.server.js.concat(paths.server.templates),
         callback: function (nodemon) {
           nodemon.on('log', function (event) {
             console.log(event.colour);
@@ -56,14 +56,14 @@ module.exports = function(grunt){
           livereload: true,
           spawn: false
         },
-        files: paths.frontend.js.concat(['.rebooted']),
+        files: paths.client.js.concat(['.rebooted']),
         tasks: ['lint'],
       },
       tests: {
         options: {
           spawn: true // needed for mocha tests
         },
-        files: paths.backend.tests,
+        files: paths.server.tests,
         tasks: ['lint', 'test'],
       }
     },
@@ -80,12 +80,15 @@ module.exports = function(grunt){
         reporter: 'spec',
         require: 'server.js'
       },
-      src: paths.backend.tests
+      src: paths.server.tests
     },
 
     env: {
       test: {
         NODE_ENV: 'test'
+      },
+      dev: {
+        NODE_ENV: 'development'
       }
     }
   });
@@ -99,7 +102,7 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-env');
 
   // Grunt tasks
-  grunt.registerTask('default', ['lint', 'test', 'concurrent']);
+  grunt.registerTask('default', ['lint', 'test', 'env:dev', 'concurrent']);
   grunt.registerTask('lint', ['jshint']);
   grunt.registerTask('test', ['env:test', 'mochaTest'/*, 'karma:unit'*/]);
   grunt.registerTask('wtest', [/*'test',*/ 'watch:tests']);

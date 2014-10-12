@@ -115,7 +115,8 @@ describe('Todo API', function(){
             var actual = JSON.parse(res.text);
             should(res).have.property('status', 200);
             should(actual).match(expected);
-            done(err);
+            if(err)
+              done(err);
           });
       });
 
