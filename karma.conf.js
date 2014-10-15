@@ -5,7 +5,7 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
+    basePath: 'public',
 
 
     // frameworks to use
@@ -15,7 +15,13 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'public/app/**/tests/*.js'
+      'vendors/angular/angular.js',
+      'vendors/angular-mocks/angular-mocks.js',
+      'vendors/angular-route/angular-route.js',
+      'vendors/angular-resource/angular-resource.js',
+      'app/*.js',
+      'app/**/*.js',
+      // 'app/**/tests/*.js'
     ],
 
 
@@ -27,14 +33,22 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      'app/**/*.js': 'coverage'
     },
 
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['mocha'],
+    reporters: ['mocha', 'coverage'],
 
+    coverageReporter: {
+      reporters:[
+        { type: 'html', dir:'coverage/' },
+        { type: 'text' },
+        { type: 'text-summary' }
+      ],
+    },
 
     // web server port
     port: 9876,

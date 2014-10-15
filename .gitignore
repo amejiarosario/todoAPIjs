@@ -1,2 +1,3 @@
 .rebooted
 node_modules
+public/coverage/
