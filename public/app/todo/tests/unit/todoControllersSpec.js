@@ -108,6 +108,11 @@ describe('Todo Controller', function() {
         $httpBackend.flush();
         expect(mockScope.todos.length).toEqual(2);
       });
+
+      it('should have updated the name', function() {
+        $httpBackend.flush();
+        expect(mockScope.todos[1].name).toEqual(mockData.name);
+      });
     });
 
     describe('#delete', function() {
