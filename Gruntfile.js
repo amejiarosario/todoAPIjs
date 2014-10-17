@@ -90,7 +90,29 @@ module.exports = function(grunt){
       dev: {
         NODE_ENV: 'development'
       }
-    }
+    },
+
+    shell: {
+      mongo: {
+        command: "sh ./bin/startMongoIfNotRunning.sh",
+        options: {
+          async: true
+        }
+      },
+    },
+
+    karma: {
+      unit: {
+        configFile: 'karma.conf.js',
+        singleRun: true
+      }
+    },
+
+    protractor: {
+      e2e: {
+        configFile: "protractor.conf.js"
+      },
+    },
   });
 
   // contrib tasks
@@ -100,10 +122,13 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-env');
+  grunt.loadNpmTasks('grunt-shell-spawn');
+  grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-protractor-runner');
 
   // Grunt tasks
-  grunt.registerTask('default', ['lint', 'test', 'env:dev', 'concurrent']);
+  grunt.registerTask('default', ['shell:mongo', 'lint', 'test', 'env:dev', 'concurrent']);
   grunt.registerTask('lint', ['jshint']);
-  grunt.registerTask('test', ['env:test', 'mochaTest'/*, 'karma:unit'*/]);
+  grunt.registerTask('test', ['shell:mongo', 'env:test', 'mochaTest', 'karma:unit', 'protractor:e2e']);
   grunt.registerTask('wtest', [/*'test',*/ 'watch:tests']);
 }

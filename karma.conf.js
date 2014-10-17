@@ -21,12 +21,12 @@ module.exports = function(config) {
       'vendors/angular-resource/angular-resource.js',
       'app/*.js',
       'app/**/*.js',
-      // 'app/**/tests/*.js'
     ],
 
 
     // list of files to exclude
     exclude: [
+      'app/**/test/e2e/*.js'
     ],
 
 
