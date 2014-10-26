@@ -72,7 +72,8 @@ module.exports = function(grunt){
       options: {
         logConcurrentOutput: true
       },
-      target: ['nodemon', 'watch:code']
+      dev: ['nodemon', 'watch:code'],
+      test: ['nodemon', ]
     },
 
     mochaTest: {
@@ -129,6 +130,7 @@ module.exports = function(grunt){
   // Grunt tasks
   grunt.registerTask('default', ['shell:mongo', 'lint', 'test', 'env:dev', 'concurrent']);
   grunt.registerTask('lint', ['jshint']);
-  grunt.registerTask('test', ['shell:mongo', 'env:test', 'mochaTest', 'karma:unit', 'protractor:e2e']);
+  grunt.registerTask('e2e', ['env:test', 'nodemon', 'protractor:e2e']);
+  grunt.registerTask('test', ['shell:mongo', 'env:test', 'mochaTest', 'karma:unit', 'e2e']);
   grunt.registerTask('wtest', [/*'test',*/ 'watch:tests']);
 }
