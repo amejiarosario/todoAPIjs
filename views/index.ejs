@@ -12,6 +12,7 @@
     <!-- Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-resource.min.js"></script>
 
     <!-- Template -->
     <script type="text/ng-template" id="/todos.html">
@@ -22,6 +23,8 @@
           <a href="#/{{$index}}">{{todo.name}}</a>
         </li>
       </ul>
+
+      New task <input type="text" ng-model="newTodo"><button ng-click="save()">Create</button>
     </script>
 
     <script type="text/ng-template" id="/todoDetails.html">
@@ -31,32 +34,34 @@
     </script>
 
     <script>
-      angular.module('app', ['ngRoute'])
+      angular.module('app', ['ngRoute', 'ngResource'])
 
         //---------------
         // Services
         //---------------
 
-        .factory('Todos', function(){
-          return [
-            { name: 'AngularJS Directives', completed: true, note: 'add notes...' },
-            { name: 'Data binding', completed: true, note: 'add notes...' },
-            { name: '$scope', completed: true, note: 'add notes...' },
-            { name: 'Controllers and Modules', completed: true, note: 'add notes...' },
-            { name: 'Templates and routes', completed: true, note: 'add notes...' },
-            { name: 'Filters and Services', completed: false, note: 'add notes...' },
-            { name: 'Get started with Node/ExpressJS', completed: false, note: 'add notes...' },
-            { name: 'Setup MongoDB database', completed: false, note: 'add notes...' },
-            { name: 'Be awesome!', completed: false, note: 'add notes...' },
-          ];
-        })
+        .factory('Todos', ['$resource', function($resource){
+          return $resource('/todos/:id', null, {
+            'update': { method:'PUT' }
+          });
+        }])
 
         //---------------
         // Controllers
         //---------------
 
         .controller('TodoController', ['$scope', 'Todos', function ($scope, Todos) {
-          $scope.todos = Todos;
+          $scope.todos = Todos.query();
+
+          $scope.save = function(){
+            if(!$scope.newTodo || $scope.newTodo.length < 1) return;
+            var todo = new Todos({ name: $scope.newTodo, completed: false });
+
+            todo.$save(function(){
+              $scope.todos.push(todo);
+              $scope.newTodo = ''; // clear textbox
+            });
+          }
         }])
 
         .controller('TodoDetailCtrl', ['$scope', '$routeParams', 'Todos', function ($scope, $routeParams, Todos) {
