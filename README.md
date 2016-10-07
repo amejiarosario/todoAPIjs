@@ -16,3 +16,14 @@ And start the program
 ```bash
 npm start
 ```
+# Routing
+
+There's a branch called `modular`, where it splits `index.html` into multiple files (todos.html, todoDetails.html, js/app.js, ...). Also, it adds HTML5 routing. So, now the AngularJS routing works without the hash '#'. 
+
+Check it out:
+
+```bash
+git checkout modular
+
+npm start
+```
